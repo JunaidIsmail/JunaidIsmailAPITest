@@ -13,18 +13,36 @@ public class MyTest {
     @Test
     public void test1() {
         RestAssured.baseURI = "http://jsonplaceholder.typicode.com";
-
         RequestSpecification request = RestAssured.given();
         request.header("Content-Type", "application/json");
+        Response response = post(request);
+        validateStatusCode(response.getStatusCode());
+
+        validateResponseBody(response);
+    }
+
+    public void validateStatusCode(int statusCode) {
+        Assert.assertEquals(201, statusCode);
+    }
+
+    public JSONObject setParam(int postId, String name, String email, String body) {
         JSONObject param = new JSONObject();
         param.put("PostId", 1);
         param.put("Name", "Junaid");
         param.put("Email", "junzismail@gmail.com");
-        param.put("Body", "13 April 2023");
+        param.put("Body", "");
 
-        Response response = request.body(param.toJSONString()).post("/posts");
-        int statusCode = response.getStatusCode();
+        return param;
+    }
 
+    public Response post(RequestSpecification request) {
+        Response response = request
+                .body(setParam(1, "Junaid", "junzismail@gmail.com", "13 April 2023").toJSONString())
+                .post("/posts");
+        return response;
+    }
+
+    public void validateResponseBody(Response response) {
         Assert.assertEquals("junzismail@gmail.com", JsonPath.from(response.asString()).get("Email"));
         Assert.assertEquals("13 April 2023", JsonPath.from(response.asString()).get("Body"));
         Assert.assertEquals(1, JsonPath.from(response.asString()).getInt("PostId"));
