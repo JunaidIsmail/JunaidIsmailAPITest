@@ -27,10 +27,10 @@ public class MyTest {
 
     public JSONObject setParam(int postId, String name, String email, String body) {
         JSONObject param = new JSONObject();
-        param.put("PostId", 1);
-        param.put("Name", "Junaid");
-        param.put("Email", "junzismail@gmail.com");
-        param.put("Body", "");
+        param.put("PostId", postId);
+        param.put("Name", name);
+        param.put("Email", email);
+        param.put("Body", body);
 
         return param;
     }
